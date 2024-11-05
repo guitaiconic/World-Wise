@@ -9,6 +9,7 @@ import BackButton from "./BackButton";
 import { useUrlPosition } from "../Hooks/useUrlPosition";
 import Message from "./Message";
 import Spinner from "./Spinner";
+import { useNavigate } from "react-router-dom";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -21,9 +22,10 @@ export function convertToEmoji(countryCode) {
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
+  const [lat, lng] = useUrlPosition(); // first step Crtete custom hook to get lat and lng from URL
   const { createCity, isLoading } = useCities();
+  const navigate = useNavigate();
   const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
-  const [lat, lng] = useUrlPosition();
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
@@ -34,26 +36,41 @@ function Form() {
   useEffect(
     function () {
       if (!lat && !lng) return;
+
+      /**
+       * Fetch city data from API and country code from API.
+       * If no city is found, it sets an error message.
+       * It also sets the country name and its emoji.
+       */
       async function fetchCityData() {
         try {
+          // Show spinner while fetching data
           setIsLoadingGeocoding(true);
+          // Clear error message
           setGeoCodingError("");
+          // Fetch data from API
           const res = await fetch(
             `${BASE_URL}?latitude=${lat}&longitude=${lng}`
           );
           const data = await res.json();
           console.log(data);
 
+          // If no city is found, throw an error
           if (!data.countryCode)
             throw new Error(
-              "That doesn't seem to be a city. Click somewhere on the map 😉 "
+              "That doesn't seem to be a city. Click somewhere on the map "
             );
+          // Set the city name
           setCityName(data.city || data.locality || "");
+          // Set the country name
           setCountry(data.countryName);
+          // Set the country emoji
           setEmoji(convertToEmoji(data.countryCode));
         } catch (err) {
+          // Set the error message
           setGeoCodingError(err.message);
         } finally {
+          // Hide spinner
           setIsLoadingGeocoding(false);
         }
       }
@@ -62,11 +79,17 @@ function Form() {
     [lat, lng]
   );
 
-  function handleSubmit(e) {
+  /**
+   * Handle form submission.
+   * @param {Event} e - The form submission event
+   */
+  async function handleSubmit(e) {
     e.preventDefault();
 
+    // If city name or date is empty, do nothing
     if (!cityName || !date) return;
 
+    // Create a new city object
     const newCity = {
       cityName,
       country,
@@ -79,7 +102,11 @@ function Form() {
       },
     };
 
-    createCity(newCity); // call the createCity function
+    // Call the createCity function
+    await createCity(newCity);
+
+    // Navigate to /app/cities
+    navigate("/app/cities");
   }
 
   if (isLoadingGeocoding) return <Spinner />;
@@ -88,6 +115,7 @@ function Form() {
     return <Message message="Click on the map to get started" />;
 
   if (geoCodingError) return <Message message={geoCodingError} />;
+
   return (
     <form
       className={`${styles.form} ${isLoading ? styles.loading : ""}`}

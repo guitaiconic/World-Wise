@@ -35,54 +35,6 @@
         "lng": 13.376933665713324
       },
       "id": "98443197"
-    },
-    {
-      "id": "fa72",
-      "cityName": "Peque",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2024-11-04T21:26:16.480Z",
-      "notes": "test",
-      "position": {
-        "lat": "42.081916678306335",
-        "lng": "-6.240234375"
-      }
-    },
-    {
-      "id": "9983",
-      "cityName": "Vila de Rei",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2024-11-04T21:30:06.307Z",
-      "notes": "love portugal",
-      "position": {
-        "lat": "39.6733703917656",
-        "lng": "-8.217773437500002"
-      }
-    },
-    {
-      "id": "258b",
-      "cityName": "Alins",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2024-11-04T21:32:21.484Z",
-      "notes": "",
-      "position": {
-        "lat": "42.52069952914966",
-        "lng": "1.34033203125"
-      }
-    },
-    {
-      "id": "8b74",
-      "cityName": "Alins",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2024-11-04T21:32:21.484Z",
-      "notes": "",
-      "position": {
-        "lat": "42.52069952914966",
-        "lng": "1.34033203125"
-      }
     }
   ]
 }
